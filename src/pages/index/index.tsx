@@ -1,61 +1,44 @@
 import { Component, PropsWithChildren } from 'react'
 import { View, Button, Text } from '@tarojs/components'
-import { observer, inject } from 'mobx-react'
-
+import { inject, observer } from 'mobx-react'
+import { useInjectedStore } from './../../hooks'
 import './index.scss'
 
-type PageStateProps = {
-  store: {
-    counterStore: {
-      counter: number,
-      increment: Function,
-      decrement: Function,
-      incrementAsync: Function
-    }
+type Store = {
+  counterStore: {
+    counter: number,
+    increment: Function,
+    decrement: Function,
+    incrementAsync: Function
   }
 }
 
-interface Index {
-  props: PageStateProps;
-}
+const Index = () => {
+  const store = useInjectedStore<Store>('store');
+  const { counterStore } = store;
+  const { counter } = counterStore
 
-@inject('store')
-@observer
-class Index extends Component<PropsWithChildren> {
-  componentDidMount () { }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
-
-  increment = () => {
-    const { counterStore } = this.props.store
+  const increment = () => {
     counterStore.increment()
   }
 
-  decrement = () => {
-    const { counterStore } = this.props.store
+  const decrement = () => {
     counterStore.decrement()
   }
 
-  incrementAsync = () => {
-    const { counterStore } = this.props.store
+  const incrementAsync = () => {
     counterStore.incrementAsync()
   }
 
-  render () {
-    const { counterStore: { counter } } = this.props.store
-    return (
-      <View className='index'>
-        <Button onClick={this.increment}>+</Button>
-        <Button onClick={this.decrement}>-</Button>
-        <Button onClick={this.incrementAsync}>Add Async</Button>
-        <Text>{counter}</Text>
-      </View>
-    )
-  }
+  return (
+    <View className='index'>
+      <Button onClick={increment}>+</Button>
+      <Button onClick={decrement}>-</Button>
+      <Button onClick={incrementAsync}>Add Async</Button>
+      <Text>{counter}</Text>
+    </View>
+  )
 }
 
-export default Index
+export default observer(Index)
+// export default inject('store')(observer(Index))
