@@ -1,7 +1,7 @@
 import { Component, PropsWithChildren } from 'react'
 import { View, Button, Text } from '@tarojs/components'
-import { inject, observer } from 'mobx-react'
-import { useInjectedStore } from './../../hooks'
+import { observer } from 'mobx-react'
+import { useInjectedStore } from '@/hooks'
 import './index.scss'
 
 type Store = {
